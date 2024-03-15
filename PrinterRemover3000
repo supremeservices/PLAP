@@ -1,0 +1,21 @@
+# Define the IP address of the printer
+$IPAddress = "10.8.5.114"
+
+# Get the printer port associated with the IP address
+$PrinterPort = Get-WmiObject -Query "SELECT * FROM Win32_TCPIPPrinterPort WHERE HostAddress = '$IPAddress'"
+if ($PrinterPort) {
+    # Get the printer associated with the printer port
+    $Printer = Get-WmiObject -Query "SELECT * FROM Win32_Printer WHERE PortName = '$($PrinterPort.Name)'"
+    
+    # Remove the printer
+    if ($Printer) {
+        Remove-Printer -Name $Printer.Name -ErrorAction SilentlyContinue
+        Write-Output "Printer $($Printer.Name) removed."
+    }
+    
+    # Remove the printer port
+    Remove-PrinterPort -Name $PrinterPort.Name -ErrorAction SilentlyContinue
+    Write-Output "Printer port $($PrinterPort.Name) removed."
+} else {
+    Write-Output "No printer port found for IP address $($IPAddress)."
+}
