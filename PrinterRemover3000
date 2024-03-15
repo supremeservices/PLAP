@@ -1,5 +1,5 @@
 # Define the IP address of the printer
-$IPAddress = "10.8.5.114"
+$IPAddress = "10.10.0.180"
 
 # Get the printer port associated with the IP address
 $PrinterPort = Get-WmiObject -Query "SELECT * FROM Win32_TCPIPPrinterPort WHERE HostAddress = '$IPAddress'"
